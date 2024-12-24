@@ -18,7 +18,7 @@
 
 # Deploy helm charts, argocd, jenkins, grafana, etc.. Please see CMD.md it will explain how to deploy it.
 
-# Need to modify /etc/hosts on your Mac for new records
+# Need to modify /etc/hosts on your Mac for new dns records
     HOSTS_TO_ADD="# Minikube setup
     127.0.0.1 grafana.test
     127.0.0.1 jenkins.test
@@ -35,7 +35,7 @@
 # To confirm that your DNS refresh was successful
     ping grafana.test
 
-# Start Minikube Tunel to access services in your browser
+# Start Minikube Tunnel to allow accessing the services
     minikube tunnel --cleanup
 
 # Test accessing the services
