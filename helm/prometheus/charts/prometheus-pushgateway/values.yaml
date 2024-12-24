@@ -21,7 +21,7 @@ image:
 imagePullSecrets: []
 
 service:
-  type: ClusterIP
+  type: LoadBalancer
   port: 9091
   targetPort: 9091
   # nodePort: 32100

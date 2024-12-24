@@ -22,7 +22,10 @@
     HOSTS_TO_ADD="# Minikube setup
     127.0.0.1 grafana.test
     127.0.0.1 jenkins.test
-    127.0.0.1 argocd.test"
+    127.0.0.1 argocd.test
+    127.0.0.1 prometheus.test
+    127.0.0.1 prometheus-pushgateway.test
+    127.0.0.1 prometheus-alertmanager.test"
 
     while read -r line; do
         if ! grep -qF "$line" /etc/hosts; then
