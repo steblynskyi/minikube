@@ -31,7 +31,7 @@
 # To refresh the DNS cache on your Mac
     sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder
 # To confirm that your DNS refresh was successful
-    ping grafana.test
+    ping jenkins.test
 
 # Start Minikube Tunnel to allow accessing the services
     minikube tunnel --cleanup
