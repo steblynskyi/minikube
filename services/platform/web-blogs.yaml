@@ -1,0 +1,97 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-blogs
+  labels:
+    app: web-blogs
+    env: test
+  namespace: platform
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: web-blogs
+  revisionHistoryLimit: 1
+  template:
+    metadata:
+      name: web-blogs
+      labels:
+        env: test
+        app: web-blogs
+    spec:
+      imagePullSecrets:
+        - name: taras
+      containers:
+      - name: web-blogs
+        image: nginx
+        imagePullPolicy: IfNotPresent
+        # livenessProbe:
+        #   failureThreshold: 3
+        #   httpGet:
+        #     path: /web/health/live
+        #     port: http
+        #     scheme: HTTP
+        #   initialDelaySeconds: 20
+        #   periodSeconds: 10
+        #   successThreshold: 1
+        #   timeoutSeconds: 5
+        resources:
+          requests:
+            cpu: 25m
+            memory: 32Mi
+          limits:
+            cpu: 250m
+            memory: 256Mi
+        ports:
+        - containerPort: 80
+          name: http
+        # env:
+        # - name: ASPNETCORE_ENVIRONMENT
+        #   value: "DEV"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    alb.ingress.kubernetes.io/healthcheck-path: /
+    alb.ingress.kubernetes.io/success-codes: 200-499
+  name: web-blogs
+  namespace: platform
+  labels:
+    Domain: web-blogs.test
+spec:
+  selector:
+    app: web-blogs
+    env: test
+  ports:
+  - port: 80
+    name: http
+    targetPort: 80
+    protocol: TCP
+  type: LoadBalancer
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: web-blogs
+  namespace: platform
+spec:
+  maxReplicas: 2
+  minReplicas: 2
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: web-blogs
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 85
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageValue: 220Mi
