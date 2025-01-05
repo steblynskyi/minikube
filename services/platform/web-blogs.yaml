@@ -23,8 +23,8 @@ spec:
         - name: taras
       containers:
       - name: web-blogs
-        image: nginx
-        imagePullPolicy: IfNotPresent
+        image: steblynskyi/web-blogs:latest
+        imagePullPolicy: Always
         # livenessProbe:
         #   failureThreshold: 3
         #   httpGet:
@@ -43,30 +43,35 @@ spec:
             cpu: 250m
             memory: 256Mi
         ports:
-        - containerPort: 80
+        - containerPort: 5001
           name: http
-        # env:
-        # - name: ASPNETCORE_ENVIRONMENT
-        #   value: "DEV"
+        env:
+        - name: GMAIL_SMTP_ADDRESS
+          value: "smtp.gmail.com"
+        - name: GMAIL_SMTP_EMAIL
+          value: "test@gmail.com"
+        - name: GMAIL_SMTP_PASSWORD
+          value: "1234"
+        - name: FLASK_KEY
+          value: "1234"
+        - name: DB_URL
+          value: "sqlite:///posts.db"
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  annotations:
-    alb.ingress.kubernetes.io/healthcheck-path: /
-    alb.ingress.kubernetes.io/success-codes: 200-499
   name: web-blogs
   namespace: platform
   labels:
-    Domain: web-blogs.test
+    domain: web-blogs.test
 spec:
   selector:
     app: web-blogs
     env: test
   ports:
-  - port: 80
-    name: http
-    targetPort: 80
+  - port: 5001
+    name: tcp
+    targetPort: 5001
     protocol: TCP
   type: LoadBalancer
 ---
