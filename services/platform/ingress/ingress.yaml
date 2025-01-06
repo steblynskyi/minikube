@@ -16,4 +16,4 @@ spec:
           service:
             name: web-blogs
             port:
-              number: 5001
+              number: 8080
