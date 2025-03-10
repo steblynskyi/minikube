@@ -18,7 +18,7 @@ annotations:
     - name: support
       url: https://github.com/jenkinsci/helm-charts/issues
 apiVersion: v2
-appVersion: 2.479.2
+appVersion: 2.492.2 # Update this to the version of the app you are packaging
 description: 'Jenkins - Build great things at any scale! As the leading open source
   automation server, Jenkins provides over 1800 plugins to support building, deploying
   and automating any project. '
