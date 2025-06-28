@@ -23,7 +23,7 @@ spec:
         - name: taras
       containers:
       - name: web-blogs
-        image: steblynskyi/web-blogs:v0.1.1
+        image: steblynskyi/web-blogs:v0.1.2
         imagePullPolicy: Always
         # livenessProbe:
         #   failureThreshold: 3
