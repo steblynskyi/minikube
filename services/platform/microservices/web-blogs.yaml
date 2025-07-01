@@ -23,7 +23,7 @@ spec:
         - name: taras
       containers:
       - name: web-blogs
-        image: steblynskyi/web-blogs:v0.1.1
+        image: steblynskyi/web-blogs:v0.1.3
         imagePullPolicy: Always
         # livenessProbe:
         #   failureThreshold: 3
@@ -47,15 +47,34 @@ spec:
           name: http
         env:
         - name: GMAIL_SMTP_ADDRESS
-          value: "smtp.gmail.com"
+          valueFrom:
+            secretKeyRef:
+              name: gmail-smtp-secret
+              key: GMAIL_SMTP_ADDRESS
         - name: GMAIL_SMTP_EMAIL
-          value: "test@gmail.com"
+          valueFrom:
+            secretKeyRef:
+              name: gmail-smtp-secret
+              key: GMAIL_SMTP_EMAIL
         - name: GMAIL_SMTP_PASSWORD
-          value: "1234"
+          valueFrom:
+            secretKeyRef:
+              name: gmail-smtp-secret
+              key: GMAIL_SMTP_PASSWORD
         - name: FLASK_KEY
           value: "1234"
         - name: DB_URL
-          value: "sqlite:///posts.db"
+          value: "postgresql.postgresql.svc.cluster.local"
+        - name: DB_USER
+          valueFrom:
+            secretKeyRef:
+              name: postgresql-secret
+              key: POSTGRES_USER
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: postgresql-secret
+              key: POSTGRES_PASSWORD
 ---
 apiVersion: v1
 kind: Service

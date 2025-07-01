@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgresql
+  namespace: postgresql
+  labels:
+    app: postgresql
+    env: test
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgresql
+  revisionHistoryLimit: 1
+  template:
+    metadata:
+      labels:
+        app: postgresql
+        env: test
+    spec:
+      containers:
+      - name: postgresql
+        image: postgres:16.9-bullseye
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 5432
+          name: tcp
+        env:
+        - name: POSTGRES_DB
+          value: "blog"
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              name: postgresql-secret
+              key: POSTGRES_USER
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: postgresql-secret
+              key: POSTGRES_PASSWORD
+        livenessProbe:
+          tcpSocket:
+            port: 5432
+          initialDelaySeconds: 20
+          periodSeconds: 10
+          timeoutSeconds: 5
+          successThreshold: 1
+          failureThreshold: 3
+        resources:
+          requests:
+            cpu: 25m
+            memory: 32Mi
+          limits:
+            cpu: 250m
+            memory: 256Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgresql
+  namespace: postgresql
+  labels:
+    domain: postgresql.test
+spec:
+  selector:
+    app: postgresql
+    env: test
+  ports:
+  - port: 5432
+    name: tcp
+    targetPort: 5432
+    protocol: TCP
+  type: NodePort

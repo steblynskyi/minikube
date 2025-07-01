@@ -1,0 +1,5 @@
+{
+    "yaml.schemas": {
+        "kubernetes://schema/apps/v1@deployment+v1@service+autoscaling/v2@horizontalpodautoscaler": "file:///Users/ghost/git/personal-work/minikube/services/platform/microservices/web-blogs.yaml"
+    }
+}
