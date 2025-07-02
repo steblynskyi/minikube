@@ -63,7 +63,7 @@ spec:
               key: GMAIL_SMTP_PASSWORD
         - name: FLASK_KEY
           value: "1234"
-        - name: DB_URL
+        - name: DB_HOST
           value: "postgresql.postgresql.svc.cluster.local"
         - name: DB_USER
           valueFrom:
